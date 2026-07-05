@@ -1,3 +1,7 @@
+# Dima
+.astro
+dist
+
 # Logs
 logs
 *.log

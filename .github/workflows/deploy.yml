@@ -8,21 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v6
-        with:
-          version: 11
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24
-      - run: pnpm ci
-      - run: pnpm run build
-      - uses: actions/upload-artifact@v6
-        with:
-          name: dist
-          path: dist/
+    uses: ./.github/workflows/_build.yml
 
   deploy:
     runs-on: ubuntu-latest

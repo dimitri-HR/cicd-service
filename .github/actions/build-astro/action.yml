@@ -1,0 +1,43 @@
+# .github/actions/build-astro/action.yml — Stable stage, segment 9
+# Composite action: setup Node, install with cache, build Astro, upload dist/.
+# Consumed by deploy.yml in segment 9 and by ci.yml + _build.yml in segment 10.
+
+name: Build Astro
+description: Install dependencies with npm cache, build the Astro static site, and upload the dist artifact.
+
+inputs:
+  node-version:
+    description: Node.js version (e.g. '24') to use for the build.
+    required: false
+    default: "24"
+  artifact-name:
+    description: Name to give the uploaded build artifact.
+    required: false
+    default: dist
+
+runs:
+  using: composite
+  steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v6
+      with:
+        version: 11
+    - name: Setup Node
+      uses: actions/setup-node@v6
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: "pnpm"
+
+    - name: Install
+      run: pnpm ci
+      shell: bash
+
+    - name: Build
+      run: pnpm run build
+      shell: bash
+
+    - name: Upload dist
+      uses: actions/upload-artifact@v6
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: dist/
